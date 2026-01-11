@@ -1,8 +1,0 @@
-[project]
-name = "FlaskProject"
-version = "1.0.0"
-description = "My awesome app"
-requires-python = ">=3.9"
-
-[project.scripts]
-FlaskProject = "app.app:main"
