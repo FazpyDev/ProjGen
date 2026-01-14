@@ -1,11 +1,13 @@
- {
-    "Basic": {
-        "Change Port": "BasicChangePort",
-        "Exit": "Exit"
+{
+    "Shortcuts": {
+        "Change Port": "change_port"
     },
 
-    "BasicTemplate": {
-        "Change Port": "BasicChangePort",
-        "Exit": "Exit"
+    "Global": {
+        "Change Port": ""
+    },
+
+    "Basic": {
+        "Change Port": ""
     }
 }
