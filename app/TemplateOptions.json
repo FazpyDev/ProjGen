@@ -3,6 +3,10 @@
         "Change Port": "change_port"
     },
 
+    "Global": {
+        "Change Port": "change_port"
+    },
+
     "Flask-Shortcuts": {
         "Change Port": "test"
     },
