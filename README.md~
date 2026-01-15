@@ -4,3 +4,13 @@ A powerful Flask project generator with extensible templates.
 
 A better readme will be made after I fully decide how to progress this project and what I have in mind, no point making a good readme if I might change major things later on.
 If you do want to learn more (for some reason) message me on discord: fazpy
+
+
+To add your templates, create a new folder into the templates directory in app and then put in template(s) in there
+thats all you have to do if you dont want to add settings
+
+if you do, follow these steps:
+The Templategroupname is the folder you created in app/templates
+
+inside of templateoptions.json add this:
+"templategroupname-global"
