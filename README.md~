@@ -13,4 +13,16 @@ if you do, follow these steps:
 The Templategroupname is the folder you created in app/templates
 
 inside of templateoptions.json add this:
-"templategroupname-global"
+"templategroupname-Global": {
+    "Option name": "functionName"
+}
+this will apply to all the templates inside then group
+
+or you can do
+"templateName": {
+   "Option name": "functionName"
+}
+this will only apply to this singular template
+
+then inside of template_functions.py
+create a function named functionName with two arguements
