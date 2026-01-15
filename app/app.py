@@ -72,9 +72,14 @@ def get_destination_folder():
 def confirm(inputText):
     return input(inputText).strip().lower().startswith("y")
 
-def resolve_options(template_options, template_type, global_options):
+def resolve_options(template_options, template_parent, template_type, global_options, template_global_options):
     options = template_options.get(template_type, {})
-    return {**global_options, **options}
+    if template_parent in template_global_options:
+        print("YEAAAA   ")
+        print(template_global_options)
+        return {**template_global_options[template_parent], **options}
+    else:
+        return {**global_options, **options}
 
 def execute_option(settings, function_name, *args):
     func = getattr(settings, function_name, None) # Gets the actual function from the name and from TemplateFunctions.py
@@ -100,12 +105,53 @@ def main(): # The main function, this is just for the package version
     template_options = load_template_options(TEMPLATEOPTIONSPATH)  # These are what options each template has, e.g. Change Port, and assigns the function ChangePort to it.
     global_options = template_options.get("Global", {})
     shortcuts_options = template_options.get("Shortcuts", {})
+
+    TemplateGlobal_options = {} # "Flask": {"Change Port": ""}
+    TemplateShortcut_options = {} # "Flask": {"Change Port: """}
+
+    #This will get the global options for templateGroups
+    for key in list(template_options.keys()):
+        if "-Shortcuts" in key:
+            Group = key.split("-")[0]
+            GroupObject = template_options[key]
+            TemplateShortcut_options[Group] = GroupObject
+    for TemplateKey in list(template_options.keys()):
+
+        if "-Global" in TemplateKey:
+            Group = TemplateKey.split("-")[0]
+            GroupObject = template_options[TemplateKey]
+            for key in GroupObject:
+                if Group in TemplateShortcut_options and key in TemplateShortcut_options[Group] and GroupObject[key] == "":
+                    GroupObject[key] = TemplateShortcut_options[Group][key]
+                elif key in shortcuts_options and GroupObject[key] == "": # or in 'Flask-Shortcuts'
+                    print("1")
+                    print(TemplateShortcut_options)
+                    GroupObject[key] = shortcuts_options[key]
+            TemplateGlobal_options[Group] = GroupObject
+
+ #   for Group in TemplateShortcut_options:
+ #       print(Group)
+ #       if Group in TemplateGlobal_options:
+ #           print("1st statment")
+ #           for key in TemplateShortcut_options[Group]:
+ #               print(key)
+ #               print(TemplateGlobal_options[Group])
+ #               if key in TemplateGlobal_options[Group] and TemplateGlobal_options[Group][key] == "":
+ #                   print("passed")
+ #                   TemplateGlobal_options[Group][key] = key
+
+                
+    print(TemplateShortcut_options)
+    print(TemplateGlobal_options)
+
+
     merge_shortcuts(global_options, shortcuts_options)
 
     destination_folder, name = get_destination_folder()
 
     template_groups = os.listdir(TEMPLATES_PATH) # The Groups inside of Templates, e.g. Flask
     template_group_path, templates = get_templates(template_groups) # The name of the folders inside of the Chosen TemplateGroup/Type (Default example: Flask)
+    template_group_name = os.path.basename(template_group_path)
     template_index = query_manager(templates, "Choose a template from the list above.") # The index of what template you chose, so if it is the first one, it would be 0
     template_type = templates[template_index] # Gets the name of the Template
 
@@ -121,7 +167,7 @@ def main(): # The main function, this is just for the package version
 
     while True: # While the user has not exited or there was not a major error
 
-        merged_options = resolve_options(template_options, template_type, global_options)
+        merged_options = resolve_options(template_options, template_group_name, template_type, global_options, TemplateGlobal_options)
 
         if not merged_options:
             error_print(f"No Options found for {template_type}, if this is a custom Template make sure to add a settings to TemplateSettings.json.")
