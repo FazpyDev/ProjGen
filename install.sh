@@ -57,6 +57,9 @@ mkdir -p "$INSTALL_DIR"
 # ---- Copy EXE ----
 cp "$ROOT_DIR/dist/projgen" "$INSTALL_DIR/"
 
+cp -r "$APP_DIR/templates" "$INSTALL_DIR/"
+cp "$APP_DIR/TemplateOptions.json" "$INSTALL_DIR/"
+
 # ---- Add to PATH (if not already in PATH) ----
 if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
     SHELL_RC="$HOME/.bashrc"
