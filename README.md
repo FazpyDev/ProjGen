@@ -1,6 +1,6 @@
-# Flask_createApp_
+# ProjGen
 
-`Flask_createApp` is a command-line tool for quickly scaffolding new Flask projects. It provides an interactive interface to choose from a variety of pre-built templates, from a minimal single-file app to more complex structures with databases, blueprints, and Jinja templates. It's designed to be easily extensible, allowing you to add your own custom project templates.
+`ProjGen` is a command-line tool for quickly scaffolding new Flask projects. It provides an interactive interface to choose from a variety of pre-built templates, from a minimal single-file app to more complex structures with databases, blueprints, and Jinja templates. It's designed to be easily extensible, allowing you to add your own custom project templates.
 
 ## Features
 
@@ -15,12 +15,12 @@
 
 ## Installation
 
-You can install `Flask_createApp` by cloning this repository and running the appropriate installation script. This will build the package and install the `FlaskProject` command-line tool using `pipx` for isolated installation.
+You can install `ProjGen` by cloning this repository and running the appropriate installation script. This will build the package and install the `ProjGen` command-line tool using `pipx` for isolated installation.
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/FazpyDev/Flask_createApp.git
-    cd Flask_createApp
+    git clone https://github.com/FazpyDev/ProjGen.git
+    cd ProjGen
     ```
 
 2.  **Run the installation script:**
@@ -35,14 +35,14 @@ You can install `Flask_createApp` by cloning this repository and running the app
     .\install.bat
     ```
 
-    The script will install the necessary dependencies, build the package, and install the `FlaskProject` command.
+    The script will install the necessary dependencies, build the package, and install the `projgen` command.
 
 ## Usage
 
-Once installed, you can create a new project by running the `FlaskProject` command in your terminal.
+Once installed, you can create a new project by running the `projgen` command in your terminal.
 
 ```bash
-FlaskProject
+projgen
 ```
 
 The tool will then guide you through the following steps:
@@ -53,11 +53,11 @@ The tool will then guide you through the following steps:
 
 ## Extending with Custom Templates
 
-One of the core features of `Flask_createApp` is its extensibility. You can add your own templates and associated configuration options.
+One of the core features of `ProjGen` is its extensibility. You can add your own templates and associated configuration options.
 
 ### 1. Add Your Template Files
 
-1.  Navigate to the `app/templates/` directory within the `Flask_createApp` source code.
+1.  Navigate to the `app/templates/` directory within the `ProjGen` source code.
 2.  Create a new directory for your template group (e.g., `MyTemplates`).
 3.  Inside your new group directory, create another directory for your specific template (e.g., `MyAwesomeApp`).
 4.  Place all the files and folders for your project boilerplate inside the `MyAwesomeApp` directory.
@@ -69,7 +69,6 @@ app/
     └── MyTemplates/
         └── MyAwesomeApp/
             ├── app.py
-            ├── requirements.txt
             └── ... your other files
 ```
 
