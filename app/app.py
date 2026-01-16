@@ -3,12 +3,21 @@ import shutil
 import json
 from app.TemplateFunctions import SettingFunctions
 from app.Utils import error_print, color_print
+import sys
 
 #// Variables
 
 # Constants
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__)) # The directory of app.py, this is to get the Templates folder and TemplateOptions.json, without this you could only run this inside of the app directory
+def get_install_dir():
+    if sys.platform == "win32" and os.path.exists(os.path.join(os.environ["USERPROFILE"], "projgen")):
+        return os.path.join(os.environ["USERPROFILE"], "projgen")
+    elif os.path.exists(os.path.join(os.path.expanduser("~"), "projgen")):
+        return os.path.join(os.path.expanduser("~"), "projgen")
+    else:
+        return os.path.abspath(__file__)
+
+BASE_DIR = get_install_dir() # The directory of app.py, this is to get the Templates folder and TemplateOptions.json, without this you could only run this inside of the app directory
 TEMPLATEOPTIONSPATH = os.path.join(BASE_DIR, "TemplateOptions.json") # The path of TemplateOptions.json which is used to map the Options into functions from TemplateFunctions.py
 TEMPLATES_PATH = os.path.join(BASE_DIR, "templates") # The path of the Templates directory
 DESTINATION_PARENT = os.getcwd() # The path is where app.py is run from and where the Copy of the template will go to 
@@ -92,7 +101,6 @@ def execute_option(settings, function_name, *args):
     return True
 
 def main(): # The main function, this is just for the package version
-
     if not os.path.isdir(TEMPLATES_PATH):
         error_print("Templates folder does not exist")
         return
@@ -138,47 +146,58 @@ def main(): # The main function, this is just for the package version
 
     merge_shortcuts(global_options, shortcuts_options)
 
-    destination_folder, name = get_destination_folder()
-
-    template_groups = os.listdir(TEMPLATES_PATH) # The Groups inside of Templates, e.g. Flask
-    template_group_path, templates = get_templates(template_groups) # The name of the folders inside of the Chosen TemplateGroup/Type (Default example: Flask)
-    template_group_name = os.path.basename(template_group_path)
-    template_index = query_manager(templates, "Choose a template from the list above.") # The index of what template you chose, so if it is the first one, it would be 0
-    template_type = templates[template_index] # Gets the name of the Template
-
-    source_folder = os.path.join(template_group_path, template_type) # Gets the folder of the chosen template
-
-    settings_functions = SettingFunctions() # This gets the Functions that the TemplateOptions use, e.g. ChangePort which is used by all the Default Templates.
-
-    shutil.copytree(source_folder, destination_folder) # Copies the chosen folder with the new name and the directory
-
-    if not confirm(f"Would you like to Change some settings of {name}? (Y/N) "): # If you would like to continue with some settings
-        color_print("Setup Complete!", "green")
-        return 
-
-    while True: # While the user has not exited or there was not a major error
-
-        merged_options = resolve_options(template_options, template_group_name, template_type, global_options, TemplateGlobal_options)
-
-        if not merged_options:
-            error_print(f"No Options found for {template_type}, if this is a custom Template make sure to add a settings to TemplateSettings.json.")
-            break
-            
-        options_keys = list(merged_options.keys()) # The name of each Option, e.g. "Change Port", "Exit"
-        options_keys.append("Exit")
-
-        index = query_manager(options_keys, "Choose what you want to edit.") # Gets the index of what option you want to do, e.g. Option 1 Chane Port the index would be 0
-        option_key = options_keys[index]
+    if len(sys.argv) > 2:
+        name = sys.argv[1]
+        destination_folder = os.path.join(DESTINATION_PARENT, name)
+        group = sys.argv[2]
+        template = sys.argv[3]
+        template_group_path = template_group_path = os.path.join(TEMPLATES_PATH, group) 
+        source_folder = os.path.join(template_group_path, template)
+        shutil.copytree(source_folder, destination_folder)
+    else:
         
-        if option_key.strip() == "Exit":
-            break
 
-        function_name = merged_options[option_key] #  if option_key in merged_options else ""           # Gets the name of the function connected to the Option, e.g "Change Port" would get "ChangePort" function
-        if not function_name:
-            if option_key in shortcuts_options:
-                function_name = shortcuts_options.get(option_key)
+        destination_folder, name = get_destination_folder()
 
-        execute_option(settings_functions, function_name, template_type, destination_folder)
+        template_groups = os.listdir(TEMPLATES_PATH) # The Groups inside of Templates, e.g. Flask
+        template_group_path, templates = get_templates(template_groups) # The name of the folders inside of the Chosen TemplateGroup/Type (Default example: Flask)
+        template_group_name = os.path.basename(template_group_path)
+        template_index = query_manager(templates, "Choose a template from the list above.") # The index of what template you chose, so if it is the first one, it would be 0
+        template_type = templates[template_index] # Gets the name of the Template
+
+        source_folder = os.path.join(template_group_path, template_type) # Gets the folder of the chosen template
+
+        settings_functions = SettingFunctions() # This gets the Functions that the TemplateOptions use, e.g. ChangePort which is used by all the Default Templates.
+
+        shutil.copytree(source_folder, destination_folder) # Copies the chosen folder with the new name and the directory
+
+        if not confirm(f"Would you like to Change some settings of {name}? (Y/N) "): # If you would like to continue with some settings
+            color_print("Setup Complete!", "green")
+            return 
+
+        while True: # While the user has not exited or there was not a major error
+
+            merged_options = resolve_options(template_options, template_group_name, template_type, global_options, TemplateGlobal_options)
+
+            if not merged_options:
+                error_print(f"No Options found for {template_type}, if this is a custom Template make sure to add a settings to TemplateSettings.json.")
+                break
+                
+            options_keys = list(merged_options.keys()) # The name of each Option, e.g. "Change Port", "Exit"
+            options_keys.append("Exit")
+
+            index = query_manager(options_keys, "Choose what you want to edit.") # Gets the index of what option you want to do, e.g. Option 1 Chane Port the index would be 0
+            option_key = options_keys[index]
+            
+            if option_key.strip() == "Exit":
+                break
+
+            function_name = merged_options[option_key] #  if option_key in merged_options else ""           # Gets the name of the function connected to the Option, e.g "Change Port" would get "ChangePort" function
+            if not function_name:
+                if option_key in shortcuts_options:
+                    function_name = shortcuts_options.get(option_key)
+
+            execute_option(settings_functions, function_name, template_type, destination_folder)
 
 if __name__ == "__main__":
     main()
