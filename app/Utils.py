@@ -1,10 +1,12 @@
+#Utils.py, this is here because this is used by both app.py and Template_functions, so this reduces code reusability 
+
 from rich import print
 
-def SuccessPrint(inputText):
-    ColorPrint(inputText, "green")
+def success_print(inputText):
+    color_print(inputText, "green")
 
-def ErrorPrint(inputText):
-    ColorPrint("Error: " + inputText, "red")
+def error_print(inputText):
+    color_print("Error: " + inputText, "red")
 
-def ColorPrint(inputText, color):
+def color_print(inputText, color):
     print(f"[{color}]{inputText}[/{color}]", end="\n")
