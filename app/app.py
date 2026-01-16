@@ -1,8 +1,8 @@
 import os
 import shutil
 import json
-from TemplateFunctions import SettingFunctions
-from utils import color_print, error_print
+from app.TemplateFunctions import SettingFunctions
+from app.Utils import error_print, color_print
 
 #// Variables
 
@@ -75,8 +75,6 @@ def confirm(inputText):
 def resolve_options(template_options, template_parent, template_type, global_options, template_global_options):
     options = template_options.get(template_type, {})
     if template_parent in template_global_options:
-        print("YEAAAA   ")
-        print(template_global_options)
         return {**template_global_options[template_parent], **options}
     else:
         return {**global_options, **options}
@@ -124,8 +122,6 @@ def main(): # The main function, this is just for the package version
                 if Group in TemplateShortcut_options and key in TemplateShortcut_options[Group] and GroupObject[key] == "":
                     GroupObject[key] = TemplateShortcut_options[Group][key]
                 elif key in shortcuts_options and GroupObject[key] == "": # or in 'Flask-Shortcuts'
-                    print("1")
-                    print(TemplateShortcut_options)
                     GroupObject[key] = shortcuts_options[key]
             TemplateGlobal_options[Group] = GroupObject
 
@@ -139,11 +135,6 @@ def main(): # The main function, this is just for the package version
  #               if key in TemplateGlobal_options[Group] and TemplateGlobal_options[Group][key] == "":
  #                   print("passed")
  #                   TemplateGlobal_options[Group][key] = key
-
-                
-    print(TemplateShortcut_options)
-    print(TemplateGlobal_options)
-
 
     merge_shortcuts(global_options, shortcuts_options)
 
