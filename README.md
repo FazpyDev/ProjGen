@@ -40,6 +40,16 @@ You can install `ProjGen` by cloning this repository and running the appropriate
 ## Usage
 
 Once installed, you can create a new project by running the `projgen` command in your terminal.
+OR you can create a new project without changing any settings of it quickly by running: 
+
+```bash
+projgen name templategroup templatename 
+```
+
+`name` is what you want to call the project, so the folders name, `templategroup` is what group you are copying,
+like Flask, and `templatename` is what template you are copying.
+
+But if you would like a more user friendly way and/or to change some of the settings, use this:
 
 ```bash
 projgen
