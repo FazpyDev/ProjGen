@@ -108,31 +108,33 @@ To add configurable settings for your template (like changing a port, an API key
 
 ### 1.Shortcuts
 
-    ```json
-    {
-        "Shortcuts": { 
-            "Change Port": "change_port"
-        }
-    
-        "MyAwesomeApp": {
-            "Change Port": ""
-        }
-    
+```json
+{
+    "Shortcuts": { 
+        "Change Port": "change_port"
     }
+
+    "MyAwesomeApp": {
+        "Change Port": ""
+    }
+
+}
+```
     
 This is a global Shortcuts which means it is used everywhere, however if you do have a non global Shortcut it will be used instead
 What it does is make it so you can put a function name once and use it wherever you want, this is so if you rename a function it wont be hard to change it up
 You can also have shortcuts designed only for specific templateGroups, which use the syntax ```"Group-Shortcuts"```, for example:
 
-    ```json
-    {
-        "MyTemplates-Shortcuts": {
-            "Change Port": "change_port"
-        }
+```json
+{
+    "MyTemplates-Shortcuts": {
+        "Change Port": "change_port"
+    }
 
-        "MyAwesomeApp": {
-            "Change Port": ""
-        }
+    "MyAwesomeApp": {
+        "Change Port": ""
+    }
+```
 
 If TemplateName is inside of the Template Group Flask, it will use the change_port function for the option "Change Port"
 This is how the file structure should look like for this:
@@ -148,26 +150,26 @@ app/
 
 Global is a way to add options to every template, for example:
 
-    ```json
-    {
-        "Global": {
-            "Change Port": "change_port"
-        }
-    ```
+```json
+{
+    "Global": {
+        "Change Port": "change_port"
+    }
+```
 
 This will add the Change Port option linked to change_port function to EVERY template, even outside of Flask, which obviously probably wont work if your template is something outside of Flask, which is why you can add custom Globals
 These custom Globals override the main global, so it will not take the options from it, for example:
 
-    ```json
-    {
-        "Global": {
-            "Change Port": "change_port"
-        }
+```json
+{
+    "Global": {
+        "Change Port": "change_port"
+    }
 
-        "MyTemplates-Global": {
-            "Option": "NonExistantFunc"
-        }
-    ```
+    "MyTemplates-Global": {
+        "Option": "NonExistantFunc"
+    }
+```
 
 Inside every Template of MyTemplates it will only have the option "Option", I might add a way to choose to use both, but that will be later and probably wont happen unless people actually use this.
 
